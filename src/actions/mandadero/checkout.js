@@ -1,5 +1,4 @@
 import { db, storage } from "../../firebase/firebaseConfig";
-import { types } from "../../types/types";
 
 export const saveFile = async (file) => {
   const uploadTask = storage.ref(
@@ -33,6 +32,8 @@ export const saveCheckout = ({
     destino: viaje.destino,
     hora_destino: viaje.hora_destino,
     hora_origen: viaje.hora_origen,
+    peso_envio: viaje.peso_envio,
+    fecha_envio: viaje.fecha_envio,
   };
 
   updateViaje(viaje.id, peso);

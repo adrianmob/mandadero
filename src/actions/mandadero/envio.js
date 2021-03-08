@@ -9,44 +9,40 @@ export const viajesBusqueda = (viajes, imgPaquete) => ({
 export const viajesBusquedaEmpty = () => ({
   type: types.emptyBusqueda,
 });
-export const getViaje = ({
+export const getViaje = async ({
   dirSalida,
   dirDestino,
   fechaEnvio,
   pesoPaquete,
-  imgPaquete,
 }) => {
-  return (dispatch) => {
-    const viajesRef = db.collection("viajes");
-    viajesRef
-      .where("salida", "==", dirSalida)
-      .where("destino", "==", dirDestino)
-      .where("fechaViaje", "==", fechaEnvio)
-      .where("equipajePeso", ">=", pesoPaquete)
-      .get()
-      .then((viajes) => {
-        if (!viajes.empty) {
-          let viajesData = [];
-          const precio = getPrecio(pesoPaquete);
-          viajes.docs.forEach((viaje) => {
-            viajesData.push({
-              ...viaje.data(),
-              id: viaje.id,
-              precio,
-              peso_envio: pesoPaquete,
-            });
+  const viajesRef = db.collection("viajes");
+  const viajes = await viajesRef
+    .where("salida", "==", dirSalida)
+    .where("destino", "==", dirDestino)
+    .where("fechaViaje", "==", fechaEnvio)
+    .where("equipajePeso", ">=", pesoPaquete)
+    .get()
+    .then((viajes) => {
+      let viajesData = [];
+      if (!viajes.empty) {
+        const precio = getPrecio(pesoPaquete);
+        viajes.docs.forEach((viaje) => {
+          viajesData.push({
+            ...viaje.data(),
+            id: viaje.id,
+            precio,
+            peso_envio: pesoPaquete,
           });
-          dispatch(viajesBusqueda(viajesData, imgPaquete));
-        } else {
-          dispatch(viajesBusquedaEmpty());
-        }
-      });
-  };
+        });
+      }
+      return viajesData;
+    });
+  return viajes;
 };
 
 const getPrecio = (peso) => {
   switch (true) {
-    case peso == 1:
+    case peso === 1:
       return 85;
 
     case peso > 1 && peso < 6:

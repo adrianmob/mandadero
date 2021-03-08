@@ -9,7 +9,6 @@ import {
   Backdrop,
   Dialog,
   DialogActions,
-  DialogContentText,
   DialogTitle,
   DialogContent,
 } from "@material-ui/core";
@@ -48,29 +47,34 @@ export const CheckoutForm = ({ precio, notas, direccion }) => {
           id,
         }
       );
-      console.log(data);
 
-      const urlImg = await saveFile(viaje.imgPaquete);
+      if (data.status) {
+        const urlImg = await saveFile(viaje.imgPaquete);
+        console.log(urlImg);
+        let idEnvio = `${viaje.origen.substr(0, 4)}${viaje.destino.substr(
+          0,
+          4
+        )}${Date.now()}`;
 
-      let idEnvio = `${viaje.origen.substr(0, 4)}${viaje.destino.substr(
-        0,
-        4
-      )}${Date.now()}`;
+        setId_envio(idEnvio);
 
-      setId_envio(idEnvio);
-
-      saveCheckout({
-        notas: notas ? notas : "",
-        direccion: direccion ? direccion : "",
-        total,
-        urlImg,
-        viaje,
-        auth,
-        id_envio: idEnvio,
-      });
-
+        saveCheckout({
+          notas: notas ? notas : "",
+          direccion: direccion ? direccion : "",
+          total,
+          urlImg,
+          viaje,
+          auth,
+          id_envio: idEnvio,
+        });
+        setOpen(false);
+        setOpenDialog(true);
+      } else {
+        setOpen(false);
+      }
+    } else {
+      console.log(error);
       setOpen(false);
-      setOpenDialog(true);
     }
   };
 
@@ -85,11 +89,14 @@ export const CheckoutForm = ({ precio, notas, direccion }) => {
   };
 
   const setDireccion = (direccion) => {
-    const newDir = direccion.split(",");
-    return `${newDir[0]}`;
+    if (direccion) {
+      const newDir = direccion.split(",");
+      return `${newDir[0]}`;
+    }
   };
 
   const handleSendEmail = async () => {
+    console.log("hola");
     const body = {
       email: auth.email,
       name: auth.name,

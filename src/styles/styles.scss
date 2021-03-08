@@ -23,9 +23,9 @@
 }
 
 .auth__container {
-  width: 500px;
-  padding: 30px 30px 20px 30px;
-  border-radius: 8px;
+  width: 400px;
+  padding: 30px;
+  border-radius: 25px;
   margin: 0 auto;
   z-index: 1;
   background-color: white;
@@ -33,6 +33,16 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.shadow {
+  box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05),
+    0 15px 40px rgba(166, 173, 201, 0.2);
+}
+
+.auth__titulo {
+  text-align: center;
+  color: #4abdce;
 }
 
 .form-login {
@@ -64,4 +74,221 @@
   width: 150px;
   margin: 10px auto 0 auto;
   display: block;
+}
+
+.home__container {
+  margin: 0 auto;
+  width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 40px 0 0 0;
+  @media (max-width: 550px) {
+    width: 350px;
+  }
+}
+
+.home__img {
+  width: 250px;
+  @media (max-width: 550px) {
+    width: 200px;
+  }
+}
+
+.home__titulo {
+  font-size: 4rem;
+  text-transform: uppercase;
+  margin: 30px 0;
+  @media (max-width: 550px) {
+    font-size: 2.5rem;
+  }
+}
+
+.home__leyenda {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  @media (max-width: 550px) {
+    font-size: 1.3rem;
+  }
+}
+
+.viaje__container {
+  width: 380px;
+  padding: 30px;
+  border-radius: 25px;
+  margin: 0 auto;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  @media (max-width: 480px) {
+    width: 360px;
+  }
+}
+
+.viaje__login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.envio__container {
+  width: 380px;
+  padding: 30px;
+  border-radius: 25px;
+  margin: 0 auto;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  @media (max-width: 480px) {
+    width: 360px;
+  }
+}
+
+.envio__login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.envio__titulo {
+  text-align: center;
+}
+
+#footer {
+  display: none;
+  @media (max-width: 480px) {
+    display: block;
+  }
+}
+
+#header {
+  display: block;
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+.MuiToggleButton-root.Mui-selected {
+  color: white !important;
+  background-color: #4abdce !important;
+}
+
+.MuiToggleButton-root:hover:not(.Mui-selected) {
+  background-color: #4abcce50 !important;
+}
+
+.historial__clave {
+  font-size: 1rem;
+  text-align: center;
+}
+
+.historial__description {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.timeline {
+  margin: 20px 0 0 0;
+  width: 80%;
+}
+
+.timeline ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.timeline ul li {
+  margin: 0 20px 20px 20px;
+  position: relative;
+  height: 10px;
+}
+
+.timeline ul span {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0px;
+  height: 100%;
+  border: 1px solid #4abcce78;
+}
+
+.timeline ul span::before,
+.timeline ul span::after {
+  position: absolute;
+  content: "";
+  width: 10px;
+  height: 10px;
+  border: 2px solid #4abdce;
+  border-radius: 50%;
+  left: -7px;
+}
+
+.timeline ul span::before {
+  top: -13px;
+}
+
+.timeline ul span::after {
+  top: 100%;
+}
+
+.timeline ul li p {
+  position: absolute;
+}
+
+.timeline ul li:first-of-type p {
+  top: -15px;
+}
+
+.timeline ul li:last-of-type p {
+  bottom: -15px;
+}
+
+.historial__fecha {
+  margin-top: 15px;
+  color: #4abdce;
+}
+
+.total {
+  text-align: center;
+}
+
+.total p:first-of-type {
+  font-size: 1.3rem;
+  font-weight: bolder;
+  margin-bottom: 7px;
+}
+
+.historial__kg {
+  color: #4abdce;
+  font-weight: 500;
+}
+
+.historial__direccion {
+  margin: 20px 0;
+}
+
+.historial__direccion p {
+  padding: 8px;
+}
+
+.historial__notas {
+  margin: 20px 0;
+}
+
+.historial__notas p {
+  padding: 8px;
 }

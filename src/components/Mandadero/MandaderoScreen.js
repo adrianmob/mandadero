@@ -1,28 +1,26 @@
 import React, { useState } from "react";
-import TextField from "@material-ui/core/TextField";
-import { useForm } from "../../hooks/useForm";
-import DateFnsUtils from "@date-io/date-fns";
-import { format } from "date-fns";
+import {
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Snackbar,
+} from "@material-ui/core";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
 } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import { format } from "date-fns";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { setViaje } from "../../actions/mandadero/viaje";
+import MuiAlert from "@material-ui/lab/Alert";
+
 import { useSelector } from "react-redux";
-import Alert from "@material-ui/lab/Alert";
-import IconButton from "@material-ui/core/IconButton";
-import Collapse from "@material-ui/core/Collapse";
-import CloseIcon from "@material-ui/icons/Close";
 import { Header } from "./Header";
+import { BotomNav } from "./BotomNav";
+import { useForm } from "../../hooks/useForm";
+import { setViaje } from "../../actions/mandadero/viaje";
 
 export const MandaderoScreen = () => {
   const style_input = {
@@ -102,12 +100,18 @@ export const MandaderoScreen = () => {
     setAlert(true);
   };
 
+  const handleClose = () => {
+    setAlert(false);
+  };
+
   return (
     <>
-      <Header />
-      <div className="auth__container" style={{ marginTop: "20px" }}>
+      <header id="header">
+        <Header />
+      </header>
+      <div className="viaje__container" style={{ marginTop: "20px" }}>
         <h1>Publicar Viaje</h1>
-        <form onSubmit={handleSubmit} className="form-login">
+        <form onSubmit={handleSubmit} className="viaje__login">
           <div style={{ width: "100%", margin: "15px 0" }}>
             <GooglePlacesAutocomplete
               autocompletionRequest={searchOptions}
@@ -246,23 +250,14 @@ export const MandaderoScreen = () => {
           </Button>
         </form>
       </div>
-      <Collapse in={alert} style={{ width: "fit-content", margin: "0 auto" }}>
-        <Alert
-          action={
-            <IconButton
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setAlert(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
+      <Snackbar open={alert} autoHideDuration={6000} onClose={handleClose}>
+        <MuiAlert elevation={6} variant="filled" severity="success">
           Muy bien viaje publicado con exito
-        </Alert>
-      </Collapse>
+        </MuiAlert>
+      </Snackbar>
+      <footer id="footer">
+        <BotomNav />
+      </footer>
     </>
   );
 };

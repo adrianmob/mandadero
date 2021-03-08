@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import { TextField, Snackbar, Button } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import { useForm } from "../../hooks/useForm";
 import { useDispatch } from "react-redux";
 import { startLoginEmailPassword } from "../../actions/auth";
@@ -17,23 +17,31 @@ export const LoginScreen = () => {
   };
 
   const dispatch = useDispatch();
+  const [error, setError] = useState({ error: false, msgError: null });
 
   const [{ email, password }, handleChange, reset] = useForm({
     email: "",
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(email, password);
-    dispatch(startLoginEmailPassword(email, password));
+    const response = await dispatch(startLoginEmailPassword(email, password));
+    setError(response);
     reset();
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setError({ error: false, msgError: null });
   };
 
   return (
     <>
-      <h1 className="titulo">Iniciar Sesión</h1>
+      <h1 className="auth__titulo">Iniciar Sesión</h1>
       <form onSubmit={handleSubmit} className="form-login">
         <TextField
           type="email"
@@ -52,19 +60,33 @@ export const LoginScreen = () => {
           type="password"
           label="Contraseña"
         />
-        <Button style={style_btn} type="submit" variant="outlined">
+        <Button
+          style={style_btn}
+          type="submit"
+          variant="outlined"
+          disabled={email === "" || password === ""}
+        >
           Iniciar Sesión
         </Button>
       </form>
 
       <Button style={{ margin: "10px" }}>
         <Link
-          style={{ textDecoration: "none", color: "black" }}
+          style={{ textDecoration: "none", color: "#4ABDCE" }}
           to="/auth/register"
         >
           ¿No eres cliente? Regístrate aquí
         </Link>
       </Button>
+      <Snackbar
+        open={error.error}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <MuiAlert elevation={6} variant="filled" severity="error">
+          {error.msgError}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };

@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { getEnvios, getViajes } from "../../../actions/mandadero/historial";
 import { useSelector } from "react-redux";
 import { ListaHistorial } from "./ListaHistorial";
+import { BotomNav } from "../BotomNav";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -34,14 +35,15 @@ export const HistorialScreen = () => {
   const [envios, setEnvios] = useState([]);
   const [viajes, setViajes] = useState([]);
 
-  useEffect(async () => {
-    const envios_data = await getEnvios(uid);
-    const viajes_data = await getViajes(uid);
+  useEffect(() => {
+    async function getHistorial() {
+      const envios_data = await getEnvios(uid);
+      const viajes_data = await getViajes(uid);
 
-    setEnvios(envios_data);
-    setViajes(viajes_data);
-    console.log(envios_data);
-    console.log(viajes_data);
+      setEnvios(envios_data);
+      setViajes(viajes_data);
+    }
+    getHistorial();
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -49,7 +51,9 @@ export const HistorialScreen = () => {
   };
   return (
     <>
-      <Header />
+      <header id="header">
+        <Header />
+      </header>
       <div className="auth__container" style={{ marginTop: "20px" }}>
         <h1>Historial</h1>
         <Paper style={{ flexGrow: 1 }}>
@@ -79,6 +83,9 @@ export const HistorialScreen = () => {
           </TabPanel> */}
         </Paper>
       </div>
+      <footer id="footer">
+        <BotomNav />
+      </footer>
     </>
   );
 };

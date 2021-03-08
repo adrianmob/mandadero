@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import validator from "validator";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import { TextField, Snackbar, Button } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import { useForm } from "../../hooks/useForm";
 import { useDispatch } from "react-redux";
 import { startRegisterWithEmailPassword } from "../../actions/auth";
+
 export const RegisterScreen = () => {
   const style_input = {
     margin: "15px 0",
@@ -17,6 +18,7 @@ export const RegisterScreen = () => {
   };
 
   const dispatch = useDispatch();
+  const [error, setError] = useState({ error: false, msgError: null });
 
   const [{ email, password, name, phone }, handleChange, reset] = useForm({
     email: "",
@@ -25,13 +27,25 @@ export const RegisterScreen = () => {
     phone: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (isFormValid()) {
-      dispatch(startRegisterWithEmailPassword(email, password, name, phone));
+      const response = await dispatch(
+        startRegisterWithEmailPassword(email, password, name, phone)
+      );
+      console.log(response);
       reset();
+      setError(response);
     }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setError({ error: false, msgError: null });
   };
 
   const isFormValid = () => {
@@ -47,7 +61,7 @@ export const RegisterScreen = () => {
 
   return (
     <>
-      <h1 className="titulo">¡Únete!</h1>
+      <h1 className="auth__titulo ">¡Únete!</h1>
       <p style={{ padding: "15px 0px" }}>
         Completa el formulario para registrarse
       </p>
@@ -86,19 +100,33 @@ export const RegisterScreen = () => {
           type="password"
           label="Contraseña"
         />
-        <Button style={style_btn} type="submit" variant="outlined">
+        <Button
+          style={style_btn}
+          type="submit"
+          variant="outlined"
+          disabled={!isFormValid()}
+        >
           Crear Cuenta
         </Button>
       </form>
 
       <Button style={{ margin: "8px" }}>
         <Link
-          style={{ textDecoration: "none", color: "black" }}
+          style={{ textDecoration: "none", color: "#4ABDCE" }}
           to="/auth/login"
         >
           Ya tengo una cuenta
         </Link>
       </Button>
+      <Snackbar
+        open={error.error}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <MuiAlert elevation={6} variant="filled" severity="error">
+          {error.msgError}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };

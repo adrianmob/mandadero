@@ -13,6 +13,7 @@ import { useHistory } from "react-router-dom";
 import { Header } from "../Header";
 import { ListaViaje } from "./ListaViaje";
 import { selectBusqueda } from "../../../actions/mandadero/busqueda";
+import { BotomNav } from "../BotomNav";
 
 export const BusquedaScreen = () => {
   const { viajes } = useSelector((state) => state.busqueda);
@@ -30,7 +31,7 @@ export const BusquedaScreen = () => {
     if (viajes.length === 0) {
       history.push("/envio");
     }
-  }, [viajes]);
+  }, [viajes, history]);
 
   const setDireccion = (direccion) => {
     const newDir = direccion.split(",");
@@ -49,9 +50,7 @@ export const BusquedaScreen = () => {
   const handleChangeHora = (hora) => {
     const horaViaje = format(hora, "HH:mm");
     const filterViajes = viajes.filter((value) => {
-      if (value.horaViaje == horaViaje) {
-        return value;
-      }
+      if (value.horaViaje === horaViaje) return value;
     });
     setFilterViajes(filterViajes);
     setHora(hora);
@@ -59,7 +58,7 @@ export const BusquedaScreen = () => {
 
   const handleSelectViaje = (id) => {
     const selectViaje = viajes.find((value) => {
-      if (value.id == id) {
+      if (value.id === id) {
         return value;
       }
     });
@@ -71,6 +70,7 @@ export const BusquedaScreen = () => {
       origen: selectViaje.salida,
       destino: selectViaje.destino,
       peso_envio: selectViaje.peso_envio,
+      fecha_envio: selectViaje.fechaViaje,
       hora_destino: selectViaje.hora_llegada,
       hora_origen: selectViaje.horaViaje,
     };
@@ -81,7 +81,9 @@ export const BusquedaScreen = () => {
 
   return (
     <>
-      <Header />
+      <header id="header">
+        <Header />
+      </header>{" "}
       <div className="auth__container" style={{ marginTop: "20px" }}>
         <h1>Busqueda</h1>
         <div>
@@ -94,7 +96,7 @@ export const BusquedaScreen = () => {
               onChange={handleChangeHora}
             />
           </MuiPickersUtilsProvider>
-          {filterViajes.length == 0 ? (
+          {filterViajes.length === 0 ? (
             <ListaViaje
               viajes={viajes}
               setDireccion={setDireccion}
@@ -128,6 +130,9 @@ export const BusquedaScreen = () => {
           </Popover>
         </div>
       </div>
+      <footer id="footer">
+        <BotomNav />
+      </footer>
     </>
   );
 };

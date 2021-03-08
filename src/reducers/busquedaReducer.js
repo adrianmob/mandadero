@@ -22,6 +22,7 @@ export const busquedaReducer = (state = {}, action) => {
         peso_envio: action.payload.peso_envio,
         hora_origen: action.payload.hora_origen,
         hora_destino: action.payload.hora_destino,
+        fecha_envio: action.payload.fecha_envio,
       };
 
     default:

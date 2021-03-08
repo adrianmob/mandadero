@@ -23,7 +23,6 @@ export const Header = () => {
   };
 
   const toggleDrawer = (open) => (event) => {
-    let today = new Date();
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
@@ -35,12 +34,18 @@ export const Header = () => {
   };
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar position="sticky" style={{ backgroundColor: "#4ABDCE" }}>
         <Toolbar>
           <IconButton onClick={toggleDrawer(true)} edge="start" color="inherit">
             <MenuIcon />
           </IconButton>
-          <h3 style={{ flexGrow: "1" }}>Mandadero</h3>
+          <Link
+            style={{ flexGrow: "1", textDecoration: "none", color: "white" }}
+            to="/"
+          >
+            <h3>El Mandadero</h3>
+          </Link>
+
           <Button onClick={handleLogout} color="inherit">
             Logout
           </Button>
@@ -48,7 +53,7 @@ export const Header = () => {
       </AppBar>
       <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
         <List style={{ width: "250px" }}>
-          <Link to="/" style={{ textDecoration: "none", color: "black" }}>
+          <Link to="/viaje" style={{ textDecoration: "none", color: "black" }}>
             <ListItem button>
               <ListItemText primary="Publicar Viaje" />
             </ListItem>

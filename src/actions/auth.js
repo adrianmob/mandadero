@@ -14,14 +14,18 @@ export const logout = () => ({
 });
 
 export const startLoginEmailPassword = (email, password) => {
-  return (dispatch) => {
-    firebase
+  const response = async (dispatch) => {
+    return await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
         dispatch(login(user.uid, user.displayName, user.email));
+      })
+      .catch((error) => {
+        return { error: true, msgError: error.message };
       });
   };
+  return response;
 };
 
 export const startRegisterWithEmailPassword = (
@@ -30,8 +34,8 @@ export const startRegisterWithEmailPassword = (
   name,
   phone
 ) => {
-  return (dispatch) => {
-    firebase
+  const response = async (dispatch) => {
+    return await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async ({ user }) => {
@@ -42,8 +46,12 @@ export const startRegisterWithEmailPassword = (
           .then(() => {
             dispatch(login(user.uid, name, user.email));
           });
+      })
+      .catch((error) => {
+        return { error: true, msgError: error.message };
       });
   };
+  return response;
 };
 
 export const salir = () => {

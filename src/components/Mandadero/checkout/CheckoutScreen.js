@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import { TextField, Button } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { loadStripe } from "@stripe/stripe-js";
-import {
-  CardElement,
-  Elements,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { Header } from "../Header";
 import { useForm } from "../../../hooks/useForm";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { CheckoutForm } from "./CheckoutForm";
 import { useHistory } from "react-router-dom";
+import { BotomNav } from "../BotomNav";
 
 export const CheckoutScreen = () => {
   const [stripePromise, setStripePromise] = useState(() =>
     loadStripe(
-      "pk_test_51INZegIUa12FAo8qX1qfFY1QMKJQD8ZiNHxLZY3LjSJRO2XPgR8Ej0oOulhcSiFKHu8srZ0M4GEbCUayXfnSKPpr00qhDNMrpJ"
+      "pk_live_51INZegIUa12FAo8qDYrPxdj5f6PEBEzMAy7xUD0m19XhQoqZbUiCnrlUQo59MV6f5f5LhoqNtkNHNVXQD0hNxXAd00Mnxg8lPv"
     )
   );
 
@@ -26,10 +21,11 @@ export const CheckoutScreen = () => {
   const history = useHistory();
 
   useEffect(() => {
+    console.log(viaje);
     if (Object.keys(viaje).length === 0) {
       history.push("/");
     }
-  }, [viaje]);
+  }, [viaje, history]);
 
   const searchOptions = {
     componentRestrictions: {
@@ -49,7 +45,9 @@ export const CheckoutScreen = () => {
 
   return (
     <>
-      <Header />
+      <header id="header">
+        <Header />
+      </header>
       <div className="auth__container" style={{ marginTop: "20px" }}>
         <h1>Pago</h1>
         <div className="form-login" style={{ color: "black" }}>
@@ -101,6 +99,9 @@ export const CheckoutScreen = () => {
           </div>
         </div>
       </div>
+      <footer id="footer">
+        <BotomNav />
+      </footer>
     </>
   );
 };

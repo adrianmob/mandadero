@@ -11,13 +11,9 @@ import {
   FormControlLabel,
   Backdrop,
   CircularProgress,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
+  Snackbar,
 } from "@material-ui/core";
-import FolderIcon from "@material-ui/icons/Folder";
+import MuiAlert from "@material-ui/lab/Alert";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,8 +25,9 @@ import { format } from "date-fns";
 import { useHistory } from "react-router-dom";
 
 import { Header } from "../Header";
-import { getViaje } from "../../../actions/mandadero/envio";
+import { getViaje, viajesBusqueda } from "../../../actions/mandadero/envio";
 import { useDispatch, useSelector } from "react-redux";
+import { BotomNav } from "../BotomNav";
 
 export const EnvioScreen = () => {
   const style_input = {
@@ -58,6 +55,7 @@ export const EnvioScreen = () => {
   const [pesoPaquete, setPesoPaquete] = useState(1);
   const [checkCarta, setCheckCarta] = useState(true);
   const [open, setopen] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   const refImage = useRef(null);
 
@@ -72,7 +70,7 @@ export const EnvioScreen = () => {
     if (trip.length > 0) {
       history.push("/busqueda");
     }
-  }, [viajes]);
+  }, [viajes, history]);
 
   const handleChangeFecha = (fecha) => {
     setFecha(fecha);
@@ -110,7 +108,7 @@ export const EnvioScreen = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const fechaEnvio = format(fecha, "dd/MM/yy");
     const { dirSalida, dirDestino } = direccion;
@@ -119,11 +117,19 @@ export const EnvioScreen = () => {
       dirDestino,
       pesoPaquete,
       fechaEnvio,
-      imgPaquete,
     };
     setopen(true);
-    dispatch(getViaje(body));
+    const viajes = await getViaje(body);
     setopen(false);
+    if (viajes.length !== 0) {
+      dispatch(viajesBusqueda(viajes, imgPaquete));
+    } else {
+      setAlert(true);
+    }
+  };
+
+  const handleClose = () => {
+    setAlert(false);
   };
 
   return (
@@ -131,10 +137,12 @@ export const EnvioScreen = () => {
       <Backdrop open={open} style={{ zIndex: "9999", color: "white" }}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Header />
-      <div className="auth__container" style={{ marginTop: "20px" }}>
-        <h1>¿A dónde quieres envíar?</h1>
-        <form onSubmit={handleSubmit} className="form-login">
+      <header id="header">
+        <Header />
+      </header>
+      <div className="envio__container" style={{ marginTop: "20px" }}>
+        <h1 className="envio__titulo">¿A dónde quieres envíar?</h1>
+        <form onSubmit={handleSubmit} className="envio__login">
           <div style={{ width: "100%", margin: "15px 0" }}>
             <GooglePlacesAutocomplete
               autocompletionRequest={searchOptions}
@@ -202,7 +210,7 @@ export const EnvioScreen = () => {
             value={pesoPaquete}
             exclusive
             onChange={handleChangeToggle}
-            style={{ width: "100%", margin: "15px" }}
+            style={{ width: "100%", margin: "15px", backgroundColor: "white" }}
           >
             <ToggleButton value={1}>
               <div className="selectPaquete">
@@ -302,6 +310,14 @@ export const EnvioScreen = () => {
           </Button>
         </form>
       </div>
+      <Snackbar open={alert} autoHideDuration={6000} onClose={handleClose}>
+        <MuiAlert elevation={6} variant="filled" severity="info">
+          No existen viajes para esas fechas.
+        </MuiAlert>
+      </Snackbar>
+      <footer id="footer">
+        <BotomNav />
+      </footer>
     </>
   );
 };
